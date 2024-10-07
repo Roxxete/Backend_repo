@@ -1,0 +1,48 @@
+version: "3" # Definir la versión del archivo docker-compose
+
+services: 
+  nodecito:  # Servicio para la aplicación Node.js
+    container_name: nodecito  # Nombre del contenedor
+    build: 
+        context: .
+        dockerfile: Dockerfile.nodecito  # Archivo Dockerfile específico para Node.js
+    tty: true
+    ports:
+      - "8080:8080"  # Mapeo del puerto 8080 del contenedor al host
+    depends_on: 
+      - marieta  # Depende del contenedor "marieta" (base de datos)
+
+  marieta:  # Servicio para la base de datos MariaDB
+    container_name: marieta  # Nombre del contenedor
+    build: 
+        context: .
+        dockerfile: Dockerfile.marieta  # Archivo Dockerfile específico para MariaDB
+    ports:
+      - "3306:3306"  # Mapeo del puerto 3306 del contenedor al host
+    environment: 
+      MYSQL_ROOT_PASSWORD: "1234"  # Variable de entorno para la contraseña de root
+
+        #networks:
+        #- redecita
+
+        # volumes:
+        # - maria-data:/data/db
+
+        # Redes: puedes definir la red para conectar los contenedores
+        # networks:
+        # docker-service:
+        # driver: bridge
+        
+
+      # Volúmenes: se puede añadir un volumen para persistir los datos de la base de datos
+      # volumes:
+      # maria-data:
+      # driver: local
+
+networks:
+  default:
+    driver: bridge  # Definición de la red predeterminada para conectar los contenedores
+
+volumes:
+  maria-data:
+    driver: local  # Definición de un volumen local para la persistencia de datos

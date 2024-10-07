@@ -1,0 +1,15 @@
+{
+  "name": "ejemplo docker nodejs+mariadb",
+  "version": "1.0.0",
+  "description": "A simple Node.js project to connect to MariaDB",
+  "main": "mainTest.js",
+  "scripts": {
+    "start": "node mainTest.js"
+  },
+  "dependencies": {
+    "mariadb": "^3.0.0"
+  },
+  "author": "Jordi",
+  "license": "ISC"
+}
+
