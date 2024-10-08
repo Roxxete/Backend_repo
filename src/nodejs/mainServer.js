@@ -1,38 +1,47 @@
-const express = require('express'); // Importar el framework Express
-const mysql = require('mysql2');    // Importar la librería MySQL para conectarse a MariaDB
+const express = require('express');
+const mysql = require('mysql2');
 
-const app = express();  // Crear una instancia de la aplicación Express
+// Crear una aplicación Express
+const app = express();
+const port = 8080;
 
-// Configuración de la conexión a la base de datos MariaDB
+// Configurar la conexión a la base de datos MariaDB
 const db = mysql.createConnection({
-  host: 'marieta',      // Nombre del contenedor de la base de datos (definido en docker-compose)
-  user: 'root',         // Usuario de la base de datos
-  password: '1234',     // Contraseña del usuario
-  database: 'testdb'    // Nombre de la base de datos que desees usar
+  host: 'marieta', // Nombre del servicio del contenedor MariaDB
+  user: 'root',
+  password: '1234', // La misma contraseña que definiste en docker-compose.yml
+  database: 'PROBANDOKV'
 });
 
-// Conectar a la base de datos y mostrar un mensaje de éxito o error
+// Conectar a la base de datos
 db.connect((err) => {
   if (err) {
-    console.error('Error al conectarse a la base de datos:', err);
-    return;
+    console.error('Error al conectar a la base de datos:', err);
+  } else {
+    console.log('Conectado a la base de datos MariaDB');
   }
-  console.log('Conexión exitosa a la base de datos MariaDB.');
 });
 
-// Crear un endpoint de prueba para verificar la conexión
-app.get('/users', (req, res) => {
-  db.query('SELECT * FROM users', (err, results) => {
+// Ruta para obtener los datos de la tabla key_value
+app.get('/api/values', (req, res) => {
+  const query = 'SELECT * FROM key_value';
+  
+  db.query(query, (err, results) => {
     if (err) {
-      res.status(500).send('Error al obtener los datos de la base de datos');
-      return;
+      console.error('Error ejecutando la consulta:', err);
+      res.status(500).send('Error en el servidor');
+    } else {
+      res.json(results);
     }
-    res.json(results);  // Devolver los resultados como JSON
   });
 });
 
-// Configurar el puerto en el que la aplicación escuchará
-const PORT = 8080;
-app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+// Ruta de inicio
+app.get('/', (req, res) => {
+  res.send('Servidor Node.js funcionando correctamente');
+});
+
+// Iniciar el servidor
+app.listen(port, () => {
+  console.log(`Servidor Node.js escuchando en el puerto ${port}`);
 });
