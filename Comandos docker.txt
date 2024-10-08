@@ -9,3 +9,12 @@ docker-compose stop: Detiene la red y guarda el estado de todos los servicios
 docker-compose start: Reinicia los servicios, y los devuelve a su estado al detenerse
 
 docker-compose down: Destruye la red y todos los servicios alojados en ella.
+
+
+ENTRAR A BBDD DESDE NODECITO:
+1.-docker exec -it nodecito bash
+
+2.mariadb -h marieta -u root -p PROBANDOKV (si no funciona, debes instalar mariadb: apt-get update && apt-get install mariadb-client -y)
+
+3.contraseña:1234
+
